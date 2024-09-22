@@ -1,0 +1,28 @@
+<h1 class="admin-h2">Danger zone</h1>
+
+<form method="DELETE" action="<%= domain_path(@domain) %>">
+  <input class="btn-sm-pink" type="submit" value="Destroy" data-turbo-confirm="Are you sure you want to delete your domain? This action is permanent and irreversible.">
+</form>
+
+<% if @_current_user.admin? %>
+
+  <div class="admin" style="margin-top: 1rem; padding: 0.5rem">
+
+    <h2 class="admin-h2">Info</h2>
+    <p>Last updated: <%= @domain.updated_at %></p>
+    <p>First created: <%= @domain.created_at %></p>
+    <p>Provisional? <%= @domain.provisional %></p>
+    <br>
+  
+    <h2 class="admin-h2">Transfer</h2>
+    <p>Current user: <%= @domain.user_users_id %>, <%=  User::User.find_by(id: @domain.user_users_id).email %></p>
+    <br>
+    <br>
+    <%= form_with url: transfer_domain_path(@domain), method: :patch do |form| %>
+      <%= form.text_field :new_user_id, placeholder: "New User's ID" %>
+      <br><br>
+      <%= form.submit "Transfer" %>
+    <% end %>
+
+  </div>
+<% end %>
